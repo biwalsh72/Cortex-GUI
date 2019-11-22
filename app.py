@@ -38,16 +38,23 @@ app.layout = html.Div(className='container', children=[
     html.Div(id='line-graph', children=dcc.Graph(id='live-pow-line',
                                                  animate=True, figure={'data': [
                                                      {'x': [1, 2, 3], 'y':[
-                                                         1, 2, 3], 'name':'d1', 'type':'line'},
-                                                     {'x': [1, 3, 3], 'y':[
-                                                         1, 2, 3], 'name':'d2', 'type':'line'},
-                                                     {'x': [2, 5, 3], 'y':[
-                                                         1, 2, 3], 'name':'d3', 'type':'line'},
-                                                 ], 'layout': dict(autosize=True, title='Band Power', xaxis=dict(automargin=True, title=dict(text='Time', font=dict(size=30))), yaxis=dict(automargin=True, title=dict(text='AF3', font=dict(size=30))), margin=dict(l=45, r=0, t=50, b=40), )})),
+                                                         1, 2, 3], 'name':'Low Beta', 'type':'line'},
+                                                     {'x': [1, 2, 8], 'y':[
+                                                         1, 3, 4], 'name':'High Beta', 'type':'line'},
+                                                     {'x': [2, 3, 5], 'y':[
+                                                         1, 2, 3], 'name':'Alpha', 'type':'line'},
+                                                     {'x': [1, 5, 6], 'y':[
+                                                         1, 7, 9], 'name':'Theta', 'type':'line'},
+                                                 ], 'layout': dict(autosize=True, title='Band Power',
+                                                                   xaxis=dict(automargin=True, title=dict(
+                                                                       text='Time', font=dict(size=30))),
+                                                                   yaxis=dict(automargin=True, title=dict(
+                                                                       text='AF3', font=dict(size=30))),
+                                                                   margin=dict(l=45, r=0, t=50, b=40), )})),
 ]
 )
 
-
+'''
 @app.callback(
     Output(component_id='live-pow-line', component_property='figure'),
     [Input(component_id='menu', component_property='value')]
@@ -59,6 +66,7 @@ def update_graphChannel(channel):
         y_axis = 'AF4'
 
     return {'layout': dict(autosize=True, title='Band Power', yaxis=dict(title=dict(text=y_axis, font=dict(size=30))))}
+'''
 
 
 async def authorize(cortex):
