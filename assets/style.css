@@ -1,0 +1,13 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    font-weight: lighter;
+}
+
+#header {
+    padding: 0;
+    border: 1px solid black;
+    margin: 0;
+    font-weight: lighter;
+    text-align: center;
+    width: 100%;
+}
