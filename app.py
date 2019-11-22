@@ -18,9 +18,16 @@ app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
 app.layout = html.Div(className='container', children=[
 
-    html.Div(id="head", children=html.H2(id="header", children='EMOTIV PERFORMANCE METRICS')),
+    html.Div(id="head", children=html.H2(
+        id="header", children='EMOTIV PERFORMANCE METRICS')),
 
-
+    dcc.Dropdown(id="menu",
+        options=[
+            {'label': 'Channel: AF3', 'value': 'AF3'},
+            {'label': 'Channel: AF4', 'value': 'AF4'},
+        ],
+        value='AF3'
+    ),
     #dcc.Graph(id='live-pow-line', animate=True),
     # dcc.Interval(
     #    id='graph-pow-update',
@@ -28,9 +35,8 @@ app.layout = html.Div(className='container', children=[
     #    n_intervals=0
     # ),
 
-    html.Div(id='line-graph', children=dcc.Graph(id='live-pow-line', animate=True, figure={'layout': { 'title': 'Band Power', 'height': '45%'}})),
-
-    html.Div(id='bar-graph', children=dcc.Graph(id='live-met-bar', animate=True, figure={'layout': {'title': 'Affective State', 'height': '45%', 'padding': 0}}))
+    html.Div(id='line-graph', children=dcc.Graph(id='live-pow-line',
+                                                 animate=True, figure={'layout': {'title': 'Band Power'}})),
 ]
 )
 
