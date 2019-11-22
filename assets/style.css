@@ -35,7 +35,8 @@ div {
 #line-graph {
     margin: 0;
     padding: 0;
-    height: 93%;
+    height: 100%;
+    width: 100vw;
     -webkit-box-shadow: 0px 1px 39px -18px rgba(0, 0, 0, 0.75);
     -moz-box-shadow: 0px 1px 39px -18px rgba(0, 0, 0, 0.75);
     box-shadow: 0px 1px 39px -18px rgba(0, 0, 0, 0.75);
@@ -45,4 +46,25 @@ div {
     position: absolute;
     height: 91%;
     width: 100%;
+    margin: 0;
+}
+
+#stats {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    border-radius: 3px;
+    z-index: 100;
+    background: #ffffff;
+    margin-right: 1rem;
+    margin-bottom: 1rem;
+    width: 11.5vw;
+    height: 50vh;
+}
+
+.stats-text {
+    font-size: calc(.4vw + .4vh + .5vmin);
+    margin: .5rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid black;
 }

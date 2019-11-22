@@ -18,22 +18,24 @@ app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
 app.layout = html.Div(className='container', children=[
 
-    html.Div(id="head", children=html.H2(
-        id="header", children='EMOTIV PERFORMANCE METRICS')),
+    html.Div(id="head", children=(html.H2(
+        id="header", children='EMOTIV PERFORMANCE METRICS'), dcc.Dropdown(id="menu",
+                                                                          options=[
+                                                                              {'label': 'Channel: AF3',
+                                                                                  'value': 'AF3'},
+                                                                              {'label': 'Channel: AF4',
+                                                                                  'value': 'AF4'},
+                                                                          ],
+                                                                          value='AF3'
+                                                                          ))),
 
-    dcc.Dropdown(id="menu",
-                 options=[
-                     {'label': 'Channel: AF3', 'value': 'AF3'},
-                     {'label': 'Channel: AF4', 'value': 'AF4'},
-                 ],
-                 value='AF3'
-                 ),
-    #dcc.Graph(id='live-pow-line', animate=True),
     # dcc.Interval(
     #    id='graph-pow-update',
     #    interval=1000,
     #    n_intervals=0
     # ),
+    
+    html.Div(id='stats', children=(html.H3(className='stats-text', children='Engagement '), html.H3(className='stats-text', children='Fatigue '), html.H4())),
 
     html.Div(id='line-graph', children=dcc.Graph(id='live-pow-line',
                                                  animate=True, figure={'data': [
@@ -45,12 +47,12 @@ app.layout = html.Div(className='container', children=[
                                                          1, 2, 3], 'name':'Alpha', 'type':'line'},
                                                      {'x': [1, 5, 6], 'y':[
                                                          1, 7, 9], 'name':'Theta', 'type':'line'},
-                                                 ], 'layout': dict(autosize=True, title='Band Power',
+                                                 ], 'layout': dict(plot_bgcolor='#ffffff', paper_bgcolor='#dddddd', autosize=True, title='Band Power',
                                                                    xaxis=dict(automargin=True, title=dict(
                                                                        text='Time', font=dict(size=30))),
                                                                    yaxis=dict(automargin=True, title=dict(
                                                                        text='AF3', font=dict(size=30))),
-                                                                   margin=dict(l=45, r=0, t=50, b=40), )})),
+                                                                   margin=dict(l=45, r=250, t=50, b=40), )})),
 ]
 )
 
@@ -93,9 +95,11 @@ async def authorize(cortex):
         await cortex.create_record(title="test record 1")
         print("** SUBSCRIBE TO POW **")
         await cortex.subscribe(['pow'])
+        # put pow stream into power variable
         power = ['pow']
         print(*power)
-        # print pow array
+        # print pow list
+
         while cortex.packet_count < 10:
             await cortex.get_data()
         await cortex.inject_marker(label='halfway', value=1,
