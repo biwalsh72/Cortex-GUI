@@ -22,12 +22,12 @@ app.layout = html.Div(className='container', children=[
         id="header", children='EMOTIV PERFORMANCE METRICS')),
 
     dcc.Dropdown(id="menu",
-        options=[
-            {'label': 'Channel: AF3', 'value': 'AF3'},
-            {'label': 'Channel: AF4', 'value': 'AF4'},
-        ],
-        value='AF3'
-    ),
+                 options=[
+                     {'label': 'Channel: AF3', 'value': 'AF3'},
+                     {'label': 'Channel: AF4', 'value': 'AF4'},
+                 ],
+                 value='AF3'
+                 ),
     #dcc.Graph(id='live-pow-line', animate=True),
     # dcc.Interval(
     #    id='graph-pow-update',
@@ -36,28 +36,29 @@ app.layout = html.Div(className='container', children=[
     # ),
 
     html.Div(id='line-graph', children=dcc.Graph(id='live-pow-line',
-                                                 animate=True, figure={'layout': {'title': 'Band Power'}})),
+                                                 animate=True, figure={'data': [
+                                                     {'x': [1, 2, 3], 'y':[
+                                                         1, 2, 3], 'name':'d1', 'type':'line'},
+                                                     {'x': [1, 3, 3], 'y':[
+                                                         1, 2, 3], 'name':'d2', 'type':'line'},
+                                                     {'x': [2, 5, 3], 'y':[
+                                                         1, 2, 3], 'name':'d3', 'type':'line'},
+                                                 ], 'layout': dict(autosize=True, title='Band Power', xaxis=dict(automargin=True, title=dict(text='Time', font=dict(size=30))), yaxis=dict(automargin=True, title=dict(text='AF3', font=dict(size=30))), margin=dict(l=45, r=0, t=50, b=40), )})),
 ]
 )
 
-# @app.callback(Output('live-pow-line', 'figure'),
-#              [Input('graph-pow-update', 'n_intervals')])
-# def update_graph_scatter(n):
-# update with pow data type
-'''
-    X.append(X[-1]+1)
-    Y.append(Y[-1]+Y[-1]*random.uniform(-0.1, 0.1))
 
-    data = plotly.graph_objs.Scatter(
-        x=list(X),
-        y=list(Y),
-        name='Scatter',
-        mode='lines+markers'
-    )
+@app.callback(
+    Output(component_id='live-pow-line', component_property='figure'),
+    [Input(component_id='menu', component_property='value')]
+)
+def update_graphChannel(channel):
+    if channel == 'AF3':
+        y_axis = 'AF3'
+    else:
+        y_axis = 'AF4'
 
-    return {'data': [data], 'layout': go.Layout(xaxis=dict(range=[min(X), max(X)]),
-                                                yaxis=dict(range=[min(Y), max(Y)]),)}
-'''
+    return {'layout': dict(autosize=True, title='Band Power', yaxis=dict(title=dict(text=y_axis, font=dict(size=30))))}
 
 
 async def authorize(cortex):

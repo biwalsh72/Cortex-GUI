@@ -33,6 +33,9 @@ div {
 }
 
 #line-graph {
+    margin: 0;
+    padding: 0;
+    height: 93%;
     -webkit-box-shadow: 0px 1px 39px -18px rgba(0, 0, 0, 0.75);
     -moz-box-shadow: 0px 1px 39px -18px rgba(0, 0, 0, 0.75);
     box-shadow: 0px 1px 39px -18px rgba(0, 0, 0, 0.75);
@@ -40,6 +43,6 @@ div {
 
 #live-pow-line {
     position: absolute;
-    height: 90%;
+    height: 91%;
     width: 100%;
 }
