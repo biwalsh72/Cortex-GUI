@@ -19,7 +19,7 @@ app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 app.layout = html.Div(className='container', children=[
 
     html.Div(id="head", children=(html.H2(
-        id="header", children='EMOTIV PERFORMANCE METRICS'), dcc.Dropdown(id="menu",
+        id="header", children='EMOTIV PERFORMANCE METRICS'), dcc.Dropdown(id='menu',
                                                                           options=[
                                                                               {'label': 'Channel: AF3',
                                                                                   'value': 'AF3'},
@@ -34,12 +34,13 @@ app.layout = html.Div(className='container', children=[
     #    interval=1000,
     #    n_intervals=0
     # ),
-    
-    html.Div(id='stats', children=(html.H3(className='stats-text', children='Engagement '), html.H3(className='stats-text', children='Fatigue '), html.H4())),
+
+    html.Div(id='stats', children=(html.H3(className='stats-text', children='Engagement '),
+                                   html.H3(className='stats-text', children='Fatigue'), html.H4())),
 
     html.Div(id='line-graph', children=dcc.Graph(id='live-pow-line',
                                                  animate=True, figure={'data': [
-                                                     {'x': [1, 2, 3], 'y':[
+                                                     {'x': [0, 2, 3], 'y':[
                                                          1, 2, 3], 'name':'Low Beta', 'type':'line'},
                                                      {'x': [1, 2, 8], 'y':[
                                                          1, 3, 4], 'name':'High Beta', 'type':'line'},
@@ -56,19 +57,31 @@ app.layout = html.Div(className='container', children=[
 ]
 )
 
-'''
+
 @app.callback(
     Output(component_id='live-pow-line', component_property='figure'),
     [Input(component_id='menu', component_property='value')]
 )
 def update_graphChannel(channel):
     if channel == 'AF3':
-        y_axis = 'AF3'
+        yaxiss = 'AF4'
     else:
-        y_axis = 'AF4'
+        yaxiss = 'AF3'
 
-    return {'layout': dict(autosize=True, title='Band Power', yaxis=dict(title=dict(text=y_axis, font=dict(size=30))))}
-'''
+    return {'data': [{'x': [0, 2, 3], 'y':[1, 2, 3], 'name':'Low Beta', 'type':'line'},
+                                                     {'x': [1, 2, 8], 'y':[
+                                                         1, 3, 4], 'name':'High Beta', 'type':'line'},
+                                                     {'x': [2, 3, 5], 'y':[
+                                                         1, 2, 3], 'name':'Alpha', 'type':'line'},
+                                                     {'x': [1, 5, 6], 'y':[
+                                                         1, 7, 9], 'name':'Theta', 'type':'line'},
+                                                 ], 'layout': dict(plot_bgcolor='#ffffff', paper_bgcolor='#dddddd', autosize=True, title='Band Power',
+                                                                   xaxis=dict(automargin=True, title=dict(
+                                                                       text='Time', font=dict(size=30))),
+                                                                   yaxis=dict(automargin=True, title=dict(
+                                                                       text=yaxiss, font=dict(size=30))),
+                                                                   margin=dict(l=45, r=250, t=50, b=40), )}
+
 
 
 async def authorize(cortex):
@@ -96,7 +109,7 @@ async def authorize(cortex):
         print("** SUBSCRIBE TO POW **")
         await cortex.subscribe(['pow'])
         # put pow stream into power variable
-        power = ['pow']
+        power=['pow']
         print(*power)
         # print pow list
 
@@ -110,7 +123,7 @@ async def authorize(cortex):
 
 
 def cortexService():
-    cortex = Cortex('./cortex_creds')
+    cortex=Cortex('./cortex_creds')
     asyncio.run(authorize(cortex))
     cortex.close()
 
