@@ -11,11 +11,14 @@ from lib.cortex import Cortex
 from flask import Flask, request, make_response
 
 # global array to store ['pow'] values
-power = []
+power = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
+         16, 17, 18, 19, 10, 20, 1, 2, 4, 5, 6, 1, 46, 7, 2, 3, 6]
 
 # x-axis of graph of
 time = deque(maxlen=10)
 time.append(1)
+
+val = deque(maxlen=20)
 
 external_stylesheets = [{'href': "https://fonts.googleapis.com/css?family=Roboto:300&display=swap",
                          'rel': "stylesheet"},
@@ -95,10 +98,10 @@ app.layout = html.Div(className='container', children=[
                      value='AF3'
                      ))),
 
-    html.Div(id='stats', children=(html.H3(className='stats-text', children='Engagement '),
-                                   html.H3(className='stats-text', children='Fatigue'), html.H4())),
-
-    html.Div(id='line-graph', children=[dcc.Graph(id='live-pow-line'),
+    html.Div(id='line-graph', children=[html.Div(id='stats-top', children=(html.H3(className='eeg-text', children='EEG Info Here '))),
+                                        dcc.Graph(id='live-pow-line'),
+                                        html.Div(id='stats', children=(html.H3(className='stats-text', children='Engagement '),
+                                        html.H3(className='stats-text', children='Fatigue'))),
                                         dcc.Interval(
         id='graph-update', interval=1*1000, n_intervals=0
     )
@@ -110,25 +113,35 @@ app.layout = html.Div(className='container', children=[
 
 @app.callback(
     Output('live-pow-line', 'figure'),
-    [Input('menu', 'value')]
+    [Input('menu', 'value'), Input('graph-update', 'n_intervals')]
 )
-def update_graphChannel(channel):
-    return {'layout': dict(plot_bgcolor='#ffffff', paper_bgcolor='#dddddd', autosize=True, title='Band Power for channel ' + channel,
-                           xaxis=dict(automargin=True, title=dict(
-                               text='Time', font=dict(size=30))),
-                           margin=dict(l=45, r=250, t=50, b=40), )}
+def update_graphChannel(channel, n):
 
+    # TO DO
+    # update data when channel is changed and output updated graph based on ['pow'] values (beta, alpha, theta, etc.)
 
-'''
-@app.callback(
-    Output(component_id='live-pow-line', component_property='figure'),
-    [Input(component_id='graph-update', component_property='interval')]
-)
-def updateGraph():
-    val = 0
+    arr = []
+
+    if channel == 'AF3':
+        theta = power[0]
+        alpha = power[1]
+        low_beta = power[2]
+        high_beta = power[3]
+        engagement = (high_beta / alpha + theta)
+        fatigue = (theta + alpha / (low_beta))
+    elif channel == 'AF4':
+        theta = power[20]
+        alpha = power[21]
+        low_beta = power[22]
+        high_beta = power[23]
+        engagement = (high_beta / alpha + theta)
+        fatigue = (theta + alpha / (low_beta))
+
+    arr = [theta, alpha, low_beta, high_beta, engagement, fatigue]
+
     global time
     time.append(time[-1]+1)
-    val.append(power[-1]+1)
+    val.append(theta)
 
     data = go.Scatter(
         x=list(time),
@@ -137,14 +150,11 @@ def updateGraph():
         mode='lines+markers'
     )
 
-    return {'data': [data], 'layout': go.Layout(xaxis=dict(range=[min(time), max(time)]),
-                                                yaxis=dict(range=[min(val), max(val)]))}
-'''
-
-# run test function when server starts
-# cortexService()
-
-# Output pow data type onto dcc graph and update values
+    return {  # 'data': [data],
+        'layout': dict(plot_bgcolor='#ffffff', paper_bgcolor='#dddddd', autosize=True, title='Band Power for channel ' + channel,
+                       #xaxis=dict(range=[min(time), max(time)], automargin=True, title=dict(text='Time', font=dict(size=30))),
+                       #yaxis=dict(range=[min(val), max(val)]),
+                       margin=dict(l=45, t=50, b=40), )}
 
 
 if __name__ == '__main__':

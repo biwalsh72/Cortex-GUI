@@ -27,6 +27,10 @@ body {
     font-weight: lighter;
 }
 
+#menu {
+    width: 80%;
+}
+
 div {
     margin: 0;
     padding: 0;
@@ -36,7 +40,7 @@ div {
     margin: 0;
     padding: 0;
     height: 100%;
-    width: 100vw;
+    width: 80%;
     -webkit-box-shadow: 0px 1px 39px -18px rgba(0, 0, 0, 0.75);
     -moz-box-shadow: 0px 1px 39px -18px rgba(0, 0, 0, 0.75);
     box-shadow: 0px 1px 39px -18px rgba(0, 0, 0, 0.75);
@@ -45,21 +49,40 @@ div {
 #live-pow-line {
     position: absolute;
     height: 91%;
-    width: 100%;
+    width: 80%;
     margin: 0;
 }
 
 #stats {
-    position: fixed;
+    display: inline-block;
+    position: absolute;
     bottom: 0;
     right: 0;
-    border-radius: 3px;
     z-index: 100;
     background: #ffffff;
-    margin-right: 1rem;
-    margin-bottom: 1rem;
-    width: 11.25vw;
-    height: 50vh;
+    border: 1px solid rgb(212, 212, 212);
+    width: 20%;
+    height: 50%;
+    -webkit-box-shadow: 9px 31px 54px -33px rgba(0, 0, 0, 0.45);
+    -moz-box-shadow: 9px 31px 54px -33px rgba(0, 0, 0, 0.45);
+    box-shadow: 9px 31px 54px -33px rgba(0, 0, 0, 0.45);
+}
+
+#stats-top {
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+    position: absolute;
+    bottom: 50%;
+    right: 0;
+    border: 1px solid rgb(212, 212, 212);
+    z-index: 100;
+    background: #ffffff;
+    width: 20%;
+    height: 45%;
+    -webkit-box-shadow: 9px 31px 54px -33px rgba(0, 0, 0, 0.45);
+    -moz-box-shadow: 9px 31px 54px -33px rgba(0, 0, 0, 0.45);
+    box-shadow: 9px 31px 54px -33px rgba(0, 0, 0, 0.45);
 }
 
 .stats-text {
@@ -67,4 +90,10 @@ div {
     margin: .5rem;
     margin-bottom: 1rem;
     border-bottom: 1px solid black;
+}
+
+.eeg-text {
+    font-size: calc(.6vw + .4vh + .6vmin);
+    margin: .5rem;
+    margin-bottom: .5rem;
 }
