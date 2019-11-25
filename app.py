@@ -16,8 +16,8 @@ power = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
          16, 17, 18, 19, 10, 20, 1, 2, 4, 5, 6, 1, 46, 7, 2, 3, 6]
 
 # x-axis of graph of
-time = deque(maxlen=10)
-time.append(-1)
+time = deque(maxlen=20)
+time.append(1)
 
 thetaval = deque(maxlen=10)
 alphaval = deque(maxlen=10)
@@ -107,7 +107,7 @@ app.layout = html.Div(className='container', children=[
     html.Div(id='line-graph', children=[html.Div(id='stats-top', children=(html.H3(className='eeg-text', children='EEG Info Here '))),
                                         dcc.Graph(id='live-pow-line'),
                                         html.Div(id='stats', children=(html.H3(className='stats-text', children='Engagement '),
-                                        html.H3(className='stats-text', children='Fatigue'))),
+                                                                       html.H3(className='stats-text', children='Fatigue'))),
                                         dcc.Interval(
         id='graph-update', interval=1*1000, n_intervals=0
     )
@@ -147,7 +147,7 @@ def update_graphChannel(channel, n):
 
     global time
     time.append(time[-1]+1)
-    
+
     thetaval.append(theta)
     alphaval.append(alpha)
     lowval.append(low_beta)
@@ -156,20 +156,28 @@ def update_graphChannel(channel, n):
     fatigueval.append(fatigue)
 
     data = []
-    
-    #create each individual line for the data values
-    data.append(go.Scatter(x=list(time),y=list(thetaval),name='Theta',mode='lines+markers'))
-    data.append(go.Scatter(x=list(time),y=list(alphaval),name='Alpha',mode='lines+markers'))
-    data.append(go.Scatter(x=list(time),y=list(lowval),name='Low beta',mode='lines+markers'))
-    data.append(go.Scatter(x=list(time),y=list(highval),name='High Beta',mode='lines+markers'))
-    data.append(go.Scatter(x=list(time),y=list(engagementval),name='Engagement',mode='lines+markers'))
-    data.append(go.Scatter(x=list(time),y=list(fatigueval),name='Fatigue',mode='lines+markers'))
 
-    return {  'data': data,
-        'layout': dict(plot_bgcolor='#ffffff', paper_bgcolor='#dddddd', autosize=True, title='Band Power for channel ' + channel,
-                       xaxis=dict(range=[min(time), max(time)], automargin=True, title=dict(text='Time', font=dict(size=30))),
-                       yaxis=dict(range=[min(n.y for n in data), max(n.y for n in data)]),
-                       margin=dict(l=45, t=50, b=40), )}
+    # create each individual line for the data values
+    data.append(go.Scatter(x=list(time), y=list(thetaval),
+                           name='Theta', mode='lines+markers'))
+    data.append(go.Scatter(x=list(time), y=list(alphaval),
+                           name='Alpha', mode='lines+markers'))
+    data.append(go.Scatter(x=list(time), y=list(lowval),
+                           name='Low beta', mode='lines+markers'))
+    data.append(go.Scatter(x=list(time), y=list(highval),
+                           name='High Beta', mode='lines+markers'))
+    data.append(go.Scatter(x=list(time), y=list(engagementval),
+                           name='Engagement', mode='lines+markers'))
+    data.append(go.Scatter(x=list(time), y=list(fatigueval),
+                           name='Fatigue', mode='lines+markers'))
+
+    return {'data': data,
+            'layout': dict(plot_bgcolor='#ffffff', paper_bgcolor='#dddddd', autosize=True, title='Band Power for channel ' + channel,
+                           xaxis=dict(range=[min(time), max(time)], automargin=True, title=dict(
+                               text='Time', font=dict(size=30))),
+                           yaxis=dict(
+                               range=[min(n.y for n in data), max(n.y for n in data)]),
+                           margin=dict(l=45, t=50, b=40), )}
 
 
 if __name__ == '__main__':
