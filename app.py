@@ -9,6 +9,7 @@ from collections import deque
 import asyncio
 from lib.cortex import Cortex
 from flask import Flask, request, make_response
+import operator
 
 # global array to store ['pow'] values
 power = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
@@ -16,9 +17,14 @@ power = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
 
 # x-axis of graph of
 time = deque(maxlen=10)
-time.append(1)
+time.append(-1)
 
-val = deque(maxlen=20)
+thetaval = deque(maxlen=10)
+alphaval = deque(maxlen=10)
+lowval = deque(maxlen=10)
+highval = deque(maxlen=10)
+engagementval = deque(maxlen=10)
+fatigueval = deque(maxlen=10)
 
 external_stylesheets = [{'href': "https://fonts.googleapis.com/css?family=Roboto:300&display=swap",
                          'rel': "stylesheet"},
@@ -141,19 +147,28 @@ def update_graphChannel(channel, n):
 
     global time
     time.append(time[-1]+1)
-    val.append(theta)
+    
+    thetaval.append(theta)
+    alphaval.append(alpha)
+    lowval.append(low_beta)
+    highval.append(high_beta)
+    engagementval.append(engagement)
+    fatigueval.append(fatigue)
 
-    data = go.Scatter(
-        x=list(time),
-        y=list(val),
-        name='scatter',
-        mode='lines+markers'
-    )
+    data = []
+    
+    #create each individual line for the data values
+    data.append(go.Scatter(x=list(time),y=list(thetaval),name='Theta',mode='lines+markers'))
+    data.append(go.Scatter(x=list(time),y=list(alphaval),name='Alpha',mode='lines+markers'))
+    data.append(go.Scatter(x=list(time),y=list(lowval),name='Low beta',mode='lines+markers'))
+    data.append(go.Scatter(x=list(time),y=list(highval),name='High Beta',mode='lines+markers'))
+    data.append(go.Scatter(x=list(time),y=list(engagementval),name='Engagement',mode='lines+markers'))
+    data.append(go.Scatter(x=list(time),y=list(fatigueval),name='Fatigue',mode='lines+markers'))
 
-    return {  # 'data': [data],
+    return {  'data': data,
         'layout': dict(plot_bgcolor='#ffffff', paper_bgcolor='#dddddd', autosize=True, title='Band Power for channel ' + channel,
-                       #xaxis=dict(range=[min(time), max(time)], automargin=True, title=dict(text='Time', font=dict(size=30))),
-                       #yaxis=dict(range=[min(val), max(val)]),
+                       xaxis=dict(range=[min(time), max(time)], automargin=True, title=dict(text='Time', font=dict(size=30))),
+                       yaxis=dict(range=[min(n.y for n in data), max(n.y for n in data)]),
                        margin=dict(l=45, t=50, b=40), )}
 
 
