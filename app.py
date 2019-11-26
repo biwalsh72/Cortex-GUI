@@ -130,7 +130,7 @@ app.layout = html.Div(className='container', children=[
                                         dcc.Graph(
                                             id='live-pow-line-af4', animate=True, style= { 'height': '47.4vh'}),
                                         html.Div(id='stats', children=(html.H3(className='stats-text', children='Engagement '),
-                                                                       html.H3(className='stats-text', children='Fatigue'), html.Button('Start Recording', id='start', ))),
+                                                                       html.H3(className='stats-text', children='Fatigue'), html.Button('Start Recording', id='start'))),
                                         dcc.Interval(
         id='graph-update', interval=1*1000, n_intervals=0, disabled=True
     ),
