@@ -10,21 +10,21 @@ import asyncio
 from lib.cortex import Cortex
 from flask import Flask, request, make_response
 import operator
+import random
 
 # global array to store ['pow'] values
-power = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
-         16, 17, 18, 19, 10, 20, 1, 2, 4, 5, 6, 1, 46, 7, 2, 3, 6]
+power = []
 
 # x-axis of graph of
 time = deque(maxlen=20)
-time.append(1)
+#time.append(1)
 
-thetaval = deque(maxlen=10)
-alphaval = deque(maxlen=10)
-lowval = deque(maxlen=10)
-highval = deque(maxlen=10)
-engagementval = deque(maxlen=10)
-fatigueval = deque(maxlen=10)
+thetaval = deque(maxlen=20);
+alphaval = deque(maxlen=20);
+lowval = deque(maxlen=20);
+highval = deque(maxlen=20);
+engagementval = deque(maxlen=20);
+fatigueval = deque(maxlen=20);
 
 external_stylesheets = [{'href': "https://fonts.googleapis.com/css?family=Roboto:300&display=swap",
                          'rel': "stylesheet"},
@@ -33,6 +33,7 @@ external_stylesheets = [{'href': "https://fonts.googleapis.com/css?family=Roboto
 
 async def authorize(cortex):
     # await cortex.inspectApi()
+    '''
     print("** USER LOGIN **")
     await cortex.get_user_login()
     print("** GET CORTEX INFO **")
@@ -48,31 +49,34 @@ async def authorize(cortex):
     print("** QUERY HEADSETS **")
     await cortex.query_headsets()
     if len(cortex.headsets) > 0:
-        print("** CREATE SESSION **")
-        await cortex.create_session(activate=True,
-                                    headset_id=cortex.headsets[0])
-        print("** CREATE RECORD **")
-        await cortex.create_record(title="test record 1")
-        print("** SUBSCRIBE TO POW **")
-        await cortex.subscribe(['pow'])
+    '''
+       # print("** CREATE SESSION **")
+       # await cortex.create_session(activate=True,
+                                   # headset_id=cortex.headsets[0])
+        #print("** CREATE RECORD **")
+        #await cortex.create_record(title="test record 1")
+        #print("** SUBSCRIBE TO POW **")
+    global power
+    power = [1,2,3,4,5,1,23,6,7,1,23,6,6,21,3,6,5,6,5,1,2,5,6,1,3,6,7,]#await cortex.subscribe(['pow'])
         # put pow stream into power variable
-        power = ['pow']
-        print(power)
+        # power = ['pow']
         # print pow list
 
-        while cortex.packet_count < 10:
-            await cortex.get_data()
-        await cortex.inject_marker(label='halfway', value=1,
-                                   time=cortex.to_epoch())
-        while cortex.packet_count < 20:
-            await cortex.get_data()
-        await cortex.close_session()
+        #while cortex.packet_count < 10:
+        #    await cortex.get_data()
+        #await cortex.inject_marker(label='halfway', value=1,
+        #                           time=cortex.to_epoch())
+        #while cortex.packet_count < 20:
+        #    await cortex.get_data()
+        #await cortex.close_session()
 
 
 def cortexService():
     cortex = Cortex('./cortex_creds')
     asyncio.run(authorize(cortex))
-    cortex.close()
+    #cortex.close()
+    
+cortexService()
 
 
 data_set = {
@@ -105,9 +109,10 @@ app.layout = html.Div(className='container', children=[
                      ))),
 
     html.Div(id='line-graph', children=[html.Div(id='stats-top', children=(html.H3(className='eeg-text', children='EEG Info Here '))),
-                                        dcc.Graph(id='live-pow-line'),
+                                        dcc.Graph(id='live-pow-line', animate=True),
                                         html.Div(id='stats', children=(html.H3(className='stats-text', children='Engagement '),
                                                                        html.H3(className='stats-text', children='Fatigue'))),
+                                        html.Div(id='intermediate-value', style={'display': 'none'}),
                                         dcc.Interval(
         id='graph-update', interval=1*1000, n_intervals=0
     )
@@ -116,45 +121,56 @@ app.layout = html.Div(className='container', children=[
 ]
 )
 
+@app.callback(
+    Output('intermediate-value', 'children'),
+    [Input('menu', 'value')]
+)
+def update_dropdown(channel):
+    global time
+    time.clear()
+    time.append(1)
+    return channel
+
 
 @app.callback(
     Output('live-pow-line', 'figure'),
-    [Input('menu', 'value'), Input('graph-update', 'n_intervals')]
+    [Input('intermediate-value', 'children'), Input('graph-update', 'n_intervals')]
 )
 def update_graphChannel(channel, n):
 
     # TO DO
     # update data when channel is changed and output updated graph based on ['pow'] values (beta, alpha, theta, etc.)
-
     arr = []
 
     if channel == 'AF3':
-        theta = power[0]
-        alpha = power[1]
-        low_beta = power[2]
-        high_beta = power[3]
+        theta = power[0] + random.randrange(0, 100 - power[0]);
+        alpha = power[1] + random.randrange(0, 100 - power[1]);
+        low_beta = power[2] + random.randrange(0, 100 - power[2]);
+        high_beta = power[3] + random.randrange(0, 100 - power[3]);
         engagement = (high_beta / alpha + theta)
         fatigue = (theta + alpha / (low_beta))
     elif channel == 'AF4':
-        theta = power[20]
-        alpha = power[21]
-        low_beta = power[22]
-        high_beta = power[23]
+        theta = power[20] + random.randrange(0, 100 - power[20]);
+        alpha = power[21] + random.randrange(0, 100 - power[21]);
+        low_beta = power[22] + random.randrange(0, 100 - power[22]);
+        high_beta = power[23] + random.randrange(0, 100 - power[23]);
         engagement = (high_beta / alpha + theta)
         fatigue = (theta + alpha / (low_beta))
-
+        
     arr = [theta, alpha, low_beta, high_beta, engagement, fatigue]
 
-    global time
-    time.append(time[-1]+1)
+    print(' Theta: ' + str(arr[0]) + '\n' + 'Alpha: ' + str(arr[1]) + '\n' + 'Low Beta: ' + str(arr[2]) + '\n')
 
-    thetaval.append(theta)
+    global time
+    time.append(time[-1]+1);
+
+    thetaval.append(theta);
     alphaval.append(alpha)
     lowval.append(low_beta)
     highval.append(high_beta)
     engagementval.append(engagement)
     fatigueval.append(fatigue)
-
+    
     data = []
 
     # create each individual line for the data values
@@ -170,13 +186,13 @@ def update_graphChannel(channel, n):
                            name='Engagement', mode='lines+markers'))
     data.append(go.Scatter(x=list(time), y=list(fatigueval),
                            name='Fatigue', mode='lines+markers'))
-
+    
     return {'data': data,
             'layout': dict(plot_bgcolor='#ffffff', paper_bgcolor='#dddddd', autosize=True, title='Band Power for channel ' + channel,
                            xaxis=dict(range=[min(time), max(time)], automargin=True, title=dict(
                                text='Time', font=dict(size=30))),
                            yaxis=dict(
-                               range=[min(n.y for n in data), max(n.y for n in data)]),
+                               range=[0, 100]),
                            margin=dict(l=45, t=50, b=40), )}
 
 
