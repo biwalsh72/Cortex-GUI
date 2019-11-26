@@ -133,7 +133,7 @@ app.layout = html.Div(className='container', children=[
                                         dcc.Graph(
                                             id='live-pow-line-af4', animate=True),
                                         html.Div(id='stats', children=(html.H3(className='stats-text', children='Engagement '),
-                                                                       html.H3(className='stats-text', children='Fatigue'), html.Button('Start Recording', id='start'))),
+                                                                       html.H3(className='stats-text', children='Fatigue'), html.Button('Start Recording', id='start', ))),
                                         dcc.Interval(
         id='graph-update', interval=1*1000, n_intervals=0, disabled=True
     ),
@@ -143,6 +143,18 @@ app.layout = html.Div(className='container', children=[
     )
 ]
 )
+
+@app.callback(
+    Output('start', 'children'),
+    [Input('start', 'n_clicks')]
+)
+def button_text(n):
+    if n == None:
+        return 'Start Recording'
+    if n != None and n % 2 == 0:
+        return 'Start Recording'
+    elif n != None and n % 2 != 0:
+        return 'Stop Recording'
 
 @app.callback(
     Output('graph-update', 'disabled'),
