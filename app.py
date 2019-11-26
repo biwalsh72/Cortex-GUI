@@ -1,5 +1,5 @@
 import dash
-from dash.dependencies import Output, Input
+from dash.dependencies import Output, Input, State
 import dash_core_components as dcc
 import dash_html_components as html
 import plotly
@@ -16,36 +16,40 @@ import random
 power = []
 
 # x-axis of graph of
-time = deque(maxlen=20)
+time = deque(maxlen=40)
 time.append(0)
+time2 = deque(maxlen=40)
+time2.append(0)
 
-#AF3 Data Values
-thetaval = deque(maxlen=20)
+# AF3 Data Values
+thetaval = deque(maxlen=40)
 thetaval.append(0)
-alphaval = deque(maxlen=20)
+alphaval = deque(maxlen=40)
 alphaval.append(0)
-lowval = deque(maxlen=20)
+lowval = deque(maxlen=40)
 lowval.append(0)
-highval = deque(maxlen=20)
+highval = deque(maxlen=40)
 highval.append(0)
-engagementval = deque(maxlen=20)
+engagementval = deque(maxlen=40)
 engagementval.append(0)
-fatigueval = deque(maxlen=20)
+fatigueval = deque(maxlen=40)
 fatigueval.append(0)
 
-#AF4 Data Values
-thetaval2 = deque(maxlen=20)
+# AF4 Data Values
+thetaval2 = deque(maxlen=40)
 thetaval2.append(0)
-alphaval2 = deque(maxlen=20)
+alphaval2 = deque(maxlen=40)
 alphaval2.append(0)
-lowval2 = deque(maxlen=20)
+lowval2 = deque(maxlen=40)
 lowval2.append(0)
-highval2 = deque(maxlen=20)
+highval2 = deque(maxlen=40)
 highval2.append(0)
-engagementval2 = deque(maxlen=20)
+engagementval2 = deque(maxlen=40)
 engagementval2.append(0)
-fatigueval2 = deque(maxlen=20)
+fatigueval2 = deque(maxlen=40)
 fatigueval2.append(0)
+
+count = 0
 
 
 external_stylesheets = [{'href': "https://fonts.googleapis.com/css?family=Roboto:300&display=swap",
@@ -129,17 +133,26 @@ app.layout = html.Div(className='container', children=[
                                         dcc.Graph(
                                             id='live-pow-line-af4', animate=True),
                                         html.Div(id='stats', children=(html.H3(className='stats-text', children='Engagement '),
-                                                                       html.H3(className='stats-text', children='Fatigue'))),
+                                                                       html.H3(className='stats-text', children='Fatigue'), html.Button('Start Recording', id='start'))),
                                         dcc.Interval(
-        id='graph-update', interval=1*1000, n_intervals=0, max_intervals=19
+        id='graph-update', interval=1*1000, n_intervals=0
     ),
         dcc.Interval(
-        id='graph-update-2', interval=1*1000, n_intervals=0, max_intervals=19
+        id='graph-update-2', interval=1*1000, n_intervals=0
     )]
     )
 ]
 )
 
+@app.callback(
+    Output('graph-update', 'disabled'),
+    [Input('start', 'n_clicks')],
+    [State('graph-update', 'disabled')],
+)
+def toggle_interval(n, disabled):
+    if n:
+        return not disabled
+    return disabled
 
 @app.callback(
     Output('live-pow-line-af3', 'figure'),
@@ -147,9 +160,11 @@ app.layout = html.Div(className='container', children=[
 )
 def updateGraph(n):
 
+    data = []
+
     global time
     time.append(time[-1]+1)
-    #retreiving / calculating band power values
+    # retreiving / calculating band power values
     theta = power[0] + random.randrange(0, 100 - power[0])
     alpha = power[1] + random.randrange(0, 100 - power[1])
     low_beta = power[2] + random.randrange(0, 100 - power[2])
@@ -163,8 +178,6 @@ def updateGraph(n):
     highval.append(high_beta)
     engagementval.append(engagement)
     fatigueval.append(fatigue)
-
-    data = []
 
     # create each individual line for the data values
     data.append(go.Scatter(x=list(time), y=list(thetaval),
@@ -190,12 +203,12 @@ def updateGraph(n):
 
 
 @app.callback(Output('live-pow-line-af4', 'figure'),
-              [Input('graph-update-2', 'n_intervals')])
-def graphUpdate2(n):
+              [Input('start', 'n_clicks'), Input('graph-update', 'n_intervals')])
+def graphUpdate2(click, n):
 
-    global time
-    time.append(time[-1]+1)
-    #retreiving / calculating band power values
+    global time2
+    time2.append(time[-1]+1)
+    # retreiving / calculating band power values
     theta = power[20] + random.randrange(0, 100 - power[20])
     alpha = power[21] + random.randrange(0, 100 - power[21])
     low_beta = power[22] + random.randrange(0, 100 - power[22])
@@ -228,7 +241,7 @@ def graphUpdate2(n):
 
     return {'data': data,
             'layout': dict(plot_bgcolor='#ffffff', paper_bgcolor='#dddddd', autosize=True, title='Band Power for channel AF4',
-                           xaxis=dict(range=[min(time), max(time)], automargin=True, title=dict(
+                           xaxis=dict(range=[min(time2), max(time2)], automargin=True, title=dict(
                                text='Time', font=dict(size=30))),
                            yaxis=dict(
                                range=[0, 100]),
