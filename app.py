@@ -34,7 +34,18 @@ fatigueval = deque(maxlen=20)
 fatigueval.append(0)
 
 #AF4 Data Values
-
+thetaval2 = deque(maxlen=20)
+thetaval2.append(0)
+alphaval2 = deque(maxlen=20)
+alphaval2.append(0)
+lowval2 = deque(maxlen=20)
+lowval2.append(0)
+highval2 = deque(maxlen=20)
+highval2.append(0)
+engagementval2 = deque(maxlen=20)
+engagementval2.append(0)
+fatigueval2 = deque(maxlen=20)
+fatigueval2.append(0)
 
 
 external_stylesheets = [{'href': "https://fonts.googleapis.com/css?family=Roboto:300&display=swap",
@@ -120,10 +131,10 @@ app.layout = html.Div(className='container', children=[
                                         html.Div(id='stats', children=(html.H3(className='stats-text', children='Engagement '),
                                                                        html.H3(className='stats-text', children='Fatigue'))),
                                         dcc.Interval(
-        id='graph-update', interval=1*1000, n_intervals=0, max_intervals=9
+        id='graph-update', interval=1*1000, n_intervals=0, max_intervals=19
     ),
         dcc.Interval(
-        id='graph-update-2', interval=1*1000, n_intervals=0, max_intervals=9
+        id='graph-update-2', interval=1*1000, n_intervals=0, max_intervals=19
     )]
     )
 ]
@@ -192,34 +203,27 @@ def graphUpdate2(n):
     engagement = (high_beta / alpha + theta)
     fatigue = (theta + alpha / (low_beta))
 
-    global thetaval
-    global alphaval
-    global lowval
-    global highval
-    global engagementval
-    global fatigueval
-
-    thetaval.append(theta)
-    alphaval.append(alpha)
-    lowval.append(low_beta)
-    highval.append(high_beta)
-    engagementval.append(engagement)
-    fatigueval.append(fatigue)
+    thetaval2.append(theta)
+    alphaval2.append(alpha)
+    lowval2.append(low_beta)
+    highval2.append(high_beta)
+    engagementval2.append(engagement)
+    fatigueval2.append(fatigue)
 
     data = []
 
     # create each individual line for the data values
-    data.append(go.Scatter(x=list(time), y=list(thetaval),
+    data.append(go.Scatter(x=list(time), y=list(thetaval2),
                            name='Theta', mode='lines+markers'))
-    data.append(go.Scatter(x=list(time), y=list(alphaval),
+    data.append(go.Scatter(x=list(time), y=list(alphaval2),
                            name='Alpha', mode='lines+markers'))
-    data.append(go.Scatter(x=list(time), y=list(lowval),
+    data.append(go.Scatter(x=list(time), y=list(lowval2),
                            name='Low beta', mode='lines+markers'))
-    data.append(go.Scatter(x=list(time), y=list(highval),
+    data.append(go.Scatter(x=list(time), y=list(highval2),
                            name='High Beta', mode='lines+markers'))
-    data.append(go.Scatter(x=list(time), y=list(engagementval),
+    data.append(go.Scatter(x=list(time), y=list(engagementval2),
                            name='Engagement', mode='lines+markers'))
-    data.append(go.Scatter(x=list(time), y=list(fatigueval),
+    data.append(go.Scatter(x=list(time), y=list(fatigueval2),
                            name='Fatigue', mode='lines+markers'))
 
     return {'data': data,
