@@ -49,9 +49,6 @@ engagementval2.append(0)
 fatigueval2 = deque(maxlen=40)
 fatigueval2.append(0)
 
-count = 0
-
-
 external_stylesheets = [{'href': "https://fonts.googleapis.com/css?family=Roboto:300&display=swap",
                          'rel': "stylesheet"},
                         ]
@@ -129,9 +126,9 @@ app.layout = html.Div(className='container', children=[
 
     html.Div(id='line-graph', children=[html.Div(id='stats-top', children=(html.H3(className='eeg-text', children='EEG Info Here '))),
                                         dcc.Graph(
-                                            id='live-pow-line-af3', animate=True),
+                                            id='live-pow-line-af3', animate=True, style= { 'height': '47.5vh'}),
                                         dcc.Graph(
-                                            id='live-pow-line-af4', animate=True),
+                                            id='live-pow-line-af4', animate=True, style= { 'height': '47.4vh'}),
                                         html.Div(id='stats', children=(html.H3(className='stats-text', children='Engagement '),
                                                                        html.H3(className='stats-text', children='Fatigue'), html.Button('Start Recording', id='start', ))),
                                         dcc.Interval(
@@ -218,6 +215,8 @@ def updateGraph(n):
               [Input('start', 'n_clicks'), Input('graph-update', 'n_intervals')])
 def graphUpdate2(click, n):
 
+    data = []
+    
     global time2
     time2.append(time[-1]+1)
     # retreiving / calculating band power values
@@ -234,8 +233,6 @@ def graphUpdate2(click, n):
     highval2.append(high_beta)
     engagementval2.append(engagement)
     fatigueval2.append(fatigue)
-
-    data = []
 
     # create each individual line for the data values
     data.append(go.Scatter(x=list(time), y=list(thetaval2),
@@ -257,7 +254,7 @@ def graphUpdate2(click, n):
                                text='Time', font=dict(size=30))),
                            yaxis=dict(
                                range=[0, 100]),
-                           margin=dict(l=45, t=50), )}
+                           margin=dict(l=45, t=50))}
 
 
 if __name__ == '__main__':

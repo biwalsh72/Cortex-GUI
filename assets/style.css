@@ -72,7 +72,7 @@ div {
     background: #ffffff;
     border: 1px solid rgb(212, 212, 212);
     width: 20%;
-    height: 50%;
+    height: 50vh;
     -webkit-box-shadow: 9px 31px 54px -33px rgba(0, 0, 0, 0.45);
     -moz-box-shadow: 9px 31px 54px -33px rgba(0, 0, 0, 0.45);
     box-shadow: 9px 31px 54px -33px rgba(0, 0, 0, 0.45);
@@ -89,7 +89,7 @@ div {
     z-index: 100;
     background: #ffffff;
     width: 20%;
-    height: 45%;
+    height: 45vh;
     -webkit-box-shadow: 9px 31px 54px -33px rgba(0, 0, 0, 0.45);
     -moz-box-shadow: 9px 31px 54px -33px rgba(0, 0, 0, 0.45);
     box-shadow: 9px 31px 54px -33px rgba(0, 0, 0, 0.45);
