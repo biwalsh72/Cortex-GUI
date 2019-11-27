@@ -29,7 +29,7 @@ To run this program, first set up a [Python virtual environment](https://docs.py
 
 Activate the virtual environment:
 
-- **./env/Scripts/activate** (Windows) / **source env/bin/activate** (Linux/Mac)
+- **./env/Scripts/activate** (Windows) /**source env/bin/activate** (Linux/Mac)
 
 Install the dependencies:
 
