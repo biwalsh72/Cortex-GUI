@@ -17,7 +17,7 @@ To isolate one or more traces on the graph, click / double-click on the values i
 To see what each value is at any particular point in time, hover over any of the data points on the graph.
 
 ## GUI Screenshots
-[GUI Screenshot 1](https://i.imgur.com/6jKRA2e.png)
+[GUI Screenshot 1](https://i.imgur.com/t6hfPaT.png)
 
 ## Running Instructions
 
@@ -25,11 +25,11 @@ Download and install **Python >= 3.5**
 
 To run this program, first set up a [Python virtual environment](https://docs.python.org/3/tutorial/venv.html) (highly recommended):
 
-- **py -m venv env** *(Windows)* / **python3 -m venv env** *(Linux/Mac)*
+- **py -m venv env** *(Windows)* || **python3 -m venv env** *(Linux/Mac)*
 
 Activate the virtual environment:
 
-- **./env/Scripts/activate** (Windows) / **source env/bin/activate** (Linux/Mac)
+- **./env/Scripts/activate** (Windows) || **source env/bin/activate** (Linux/Mac)
 
 Install the dependencies:
 
