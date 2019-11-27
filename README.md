@@ -25,11 +25,11 @@ Download and install **Python >= 3.5**
 
 To run this program, first set up a [Python virtual environment](https://docs.python.org/3/tutorial/venv.html) (highly recommended):
 
-- **py -m venv env** *(Windows)* / **python3 -m venv env** *(Linux/Mac)*
+- **py -m venv env** *(Windows)* || **python3 -m venv env** *(Linux/Mac)*
 
 Activate the virtual environment:
 
-- **./env/Scripts/activate** (Windows) /**source env/bin/activate** (Linux/Mac)
+- **./env/Scripts/activate** (Windows) || **source env/bin/activate** (Linux/Mac)
 
 Install the dependencies:
 
