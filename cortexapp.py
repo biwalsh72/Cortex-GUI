@@ -13,6 +13,11 @@ import operator
 import random
 import numpy as np
 
+# Cortex API Performance Metrics GUI HW6
+
+# WILLIAM WALSH, ERICK OROZCO, LOUBYN SINEUS, MUHAMMED TUZCU
+# was not able to test with a BCI device
+
 # global array to store ['pow'] values
 power = []
 
@@ -79,13 +84,13 @@ async def do_stuff(cortex):
         global power
         power = await cortex.subscribe(['pow'])
 
-
+#define async function for cortex service and get credentials
 def cortexService():
     cortex = Cortex('./cortex_creds')
     asyncio.run(do_stuff(cortex))
     cortex.close()
 
-
+#call service when application starts
 cortexService()
 
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
@@ -146,7 +151,7 @@ def toggle_interval(n, disabled):
         return not disabled
     return disabled
 
-
+#get data values from the global power array and form them into plotly traces
 def getValues(n):
     data = []
 
@@ -154,10 +159,10 @@ def getValues(n):
         global time
         time.append(time[-1]+1)
         # retreiving / calculating band power values
-        theta = power[0]
-        alpha = power[1]
-        low_beta = power[2]
-        high_beta = power[3]
+        theta = power["pow"][0]
+        alpha = power["pow"][1]
+        low_beta = power["pow"][2]
+        high_beta = power["pow"][3]
         engagement = (high_beta / alpha + theta)
         fatigue = (theta + alpha / (low_beta))
 
@@ -186,10 +191,10 @@ def getValues(n):
         global time2
         time2.append(time[-1]+1)
         # retreiving / calculating band power values
-        theta = power[20]
-        alpha = power[21]
-        low_beta = power[22]
-        high_beta = power[23]
+        theta = power["pow"][20]
+        alpha = power["pow"][21]
+        low_beta = power["pow"][22]
+        high_beta = power["pow"][23]
         engagement = (high_beta / alpha + theta)
         fatigue = (theta + alpha / (low_beta))
 
@@ -216,7 +221,7 @@ def getValues(n):
 
     return data
 
-
+#update graph every second with new values
 @app.callback(
     [Output('live-pow-line-af3', 'figure'), Output('eng-af3', 'children'),
      Output('lb-af3', 'children'), Output('hb-af3', 'children'), Output('al-af3', 'children'),
@@ -243,7 +248,7 @@ def updateGraph(n):
                                range=[0, 100], title=dict(text='Band Power', font=dict(size=30)), automargin=True),
                            margin=dict(l=45, t=50))}, lb, hb, al, th, eng, fat
 
-
+#update graph every second with new values
 @app.callback([Output('live-pow-line-af4', 'figure'), Output('eng-af4', 'children'),
      Output('lb-af4', 'children'), Output('hb-af4', 'children'), Output('al-af4', 'children'),
      Output('th-af4', 'children'),Output('fat-af4', 'children')],
@@ -271,6 +276,6 @@ def graphUpdate2(click, n):
                                range=[0, max(power)], title=dict(text='Band Power', font=dict(size=30)), automargin=True),
                            margin=dict(l=45, t=50))}, lb, hb, al, th, eng, fat
 
-
+#start server on localhost:8050
 if __name__ == '__main__':
     app.run_server(debug=True)

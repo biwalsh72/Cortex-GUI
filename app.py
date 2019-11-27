@@ -57,7 +57,7 @@ external_stylesheets = [{'href': "https://fonts.googleapis.com/css?family=Roboto
                          'rel': "stylesheet"},
                         ]
 
-
+#generate array of random values from 1 to 100 (same size as ['pow'])
 async def authorize():
     global power
     power = np.random.randint(99, size=24)
@@ -103,7 +103,7 @@ app.layout = html.Div(className='container', children=[
 ]
 )
 
-
+# start and stop recording function
 @app.callback(
     Output('start', 'children'),
     [Input('start', 'n_clicks')]
@@ -116,7 +116,7 @@ def button_text(n):
     elif n != None and n % 2 != 0:
         return 'Stop Recording'
 
-
+#disable interval for graph updates
 @app.callback(
     Output('graph-update', 'disabled'),
     [Input('start', 'n_clicks')],
@@ -127,7 +127,7 @@ def toggle_interval(n, disabled):
         return not disabled
     return disabled
 
-
+#get values from power array and form them into plotly traces
 def getValues(n):
     data = []
 
@@ -197,7 +197,7 @@ def getValues(n):
 
     return data
 
-
+#update graph every second with new values
 @app.callback(
     [Output('live-pow-line-af3', 'figure'), Output('eng-af3', 'children'),
      Output('lb-af3', 'children'), Output('hb-af3', 'children'), Output('al-af3', 'children'),
@@ -224,7 +224,7 @@ def updateGraph(n):
                                range=[0, 100], title=dict(text='Band Power', font=dict(size=30)), automargin=True),
                            margin=dict(l=45, t=50))}, lb, hb, al, th, eng, fat
 
-
+#update graph every second with new values
 @app.callback([Output('live-pow-line-af4', 'figure'), Output('eng-af4', 'children'),
      Output('lb-af4', 'children'), Output('hb-af4', 'children'), Output('al-af4', 'children'),
      Output('th-af4', 'children'),Output('fat-af4', 'children')],
@@ -252,6 +252,6 @@ def graphUpdate2(click, n):
                                range=[0, 100], title=dict(text='Band Power', font=dict(size=30)), automargin=True),
                            margin=dict(l=45, t=50))}, lb, hb, al, th, eng, fat
 
-
+#start server on localhost:8050
 if __name__ == '__main__':
     app.run_server(debug=True)
