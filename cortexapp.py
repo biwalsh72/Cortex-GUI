@@ -13,9 +13,6 @@ import operator
 import random
 import numpy as np
 
-#generates random values from 0 to 100 to emulate having a BCI device
-# do not have access to an actual bci device
-
 # global array to store ['pow'] values
 power = []
 
@@ -58,13 +55,35 @@ external_stylesheets = [{'href': "https://fonts.googleapis.com/css?family=Roboto
                         ]
 
 
-async def authorize():
-    global power
-    power = np.random.randint(99, size=24)
+async def do_stuff(cortex):
+    # await cortex.inspectApi()
+    print("** USER LOGIN **")
+    await cortex.get_user_login()
+    print("** GET CORTEX INFO **")
+    await cortex.get_cortex_info()
+    print("** HAS ACCESS RIGHT **")
+    await cortex.has_access_right()
+    print("** REQUEST ACCESS **")
+    await cortex.request_access()
+    print("** AUTHORIZE **")
+    await cortex.authorize()
+    print("** GET LICENSE INFO **")
+    await cortex.get_license_info()
+    print("** QUERY HEADSETS **")
+    await cortex.query_headsets()
+    if len(cortex.headsets) > 0:
+        print("** CREATE SESSION **")
+        await cortex.create_session(activate=True,
+                                    headset_id=cortex.headsets[0])
+        print("** SUBSCRIBE POW & MET **")
+        global power
+        power = await cortex.subscribe(['pow'])
 
 
 def cortexService():
-    asyncio.run(authorize())
+    cortex = Cortex('./cortex_creds')
+    asyncio.run(do_stuff(cortex))
+    cortex.close()
 
 
 cortexService()
@@ -249,7 +268,7 @@ def graphUpdate2(click, n):
                            xaxis=dict(range=[min(time2), max(time2)], automargin=True, title=dict(
                                text='Time', font=dict(size=30))),
                            yaxis=dict(
-                               range=[0, 100], title=dict(text='Band Power', font=dict(size=30)), automargin=True),
+                               range=[0, max(power)], title=dict(text='Band Power', font=dict(size=30)), automargin=True),
                            margin=dict(l=45, t=50))}, lb, hb, al, th, eng, fat
 
 
