@@ -76,6 +76,7 @@ div {
     -webkit-box-shadow: 9px 31px 54px -33px rgba(0, 0, 0, 0.45);
     -moz-box-shadow: 9px 31px 54px -33px rgba(0, 0, 0, 0.45);
     box-shadow: 9px 31px 54px -33px rgba(0, 0, 0, 0.45);
+    overflow-y: auto;
 }
 
 #stats-top {
@@ -97,8 +98,8 @@ div {
 
 .stats-text {
     font-size: calc(.4vw + .4vh + .5vmin);
-    margin: .5rem;
-    margin-bottom: 1rem;
+    margin: .25rem;
+    margin-bottom: .5rem;
     border-bottom: 1px solid black;
 }
 
@@ -151,4 +152,15 @@ div {
     -webkit-box-shadow: 9px 31px 54px -33px rgba(0, 0, 0, 0.45);
     -moz-box-shadow: 9px 31px 54px -33px rgba(0, 0, 0, 0.45);
     box-shadow: 9px 31px 54px -33px rgba(0, 0, 0, 0.45);
+}
+
+h1, h2, h3, h4 {
+    margin:0;
+    padding:0;
+}
+
+#af3-text {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
 }
