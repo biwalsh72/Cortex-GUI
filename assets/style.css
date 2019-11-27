@@ -102,7 +102,8 @@ div {
     border-bottom: 1px solid black;
 }
 
-.eeg-text {
+#intro {
+    text-align: center;
     font-size: calc(.6vw + .4vh + .6vmin);
     margin: .5rem;
     margin-bottom: .5rem;
@@ -113,20 +114,41 @@ div {
     text-align: center;
     margin-left: auto;
     margin-right: auto;
+    margin-top: 40%;
     border: 1px solid grey;
     background: #6d6d6d;
     color: white;
     height: 3rem;
+    width: 44%;
     border-radius: 4px;
-    font-size: 22px;
+    font-size: calc(.6vw + .5vh + .6vmin);
     cursor: pointer;
     -webkit-box-shadow: 9px 31px 54px -33px rgba(0, 0, 0, 0.45);
     -moz-box-shadow: 9px 31px 54px -33px rgba(0, 0, 0, 0.45);
     box-shadow: 9px 31px 54px -33px rgba(0, 0, 0, 0.45);
 }
 
-#start:hover {
+#start:hover, #reset:hover {
     transform: scale(1.1);
     transition-duration: .3s;
     transition-timing-function: ease-in-out;
+}
+
+#reset {
+    display: block;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: .5rem;
+    border: 1px solid grey;
+    background: #6d6d6d;
+    color: white;
+    height: 3rem;
+    border-radius: 4px;
+    font-size: calc(.6vw + .5vh + .6vmin);
+    width: 44%;
+    cursor: pointer;
+    -webkit-box-shadow: 9px 31px 54px -33px rgba(0, 0, 0, 0.45);
+    -moz-box-shadow: 9px 31px 54px -33px rgba(0, 0, 0, 0.45);
+    box-shadow: 9px 31px 54px -33px rgba(0, 0, 0, 0.45);
 }

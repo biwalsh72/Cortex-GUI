@@ -1,5 +1,17 @@
 # Cortex-GUI
 
+# Overview
+
+Program is built using Dash (https://plot.ly/dash/)
+
+GUI consits of two graphs:
+
+- The first is for channel AF3
+
+- The second is for channel AF4
+
+To isolate one or more values click on the 
+
 # Running Instructions
 
 To run this program, first set up a virtual environment (highly recommended):
